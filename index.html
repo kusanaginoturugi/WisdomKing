@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>聖明王院 システム</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500;700&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-deep:    #080c14;
+      --bg-dark:    #0f1625;
+      --bg-card:    #151e30;
+      --bg-card-hover: #1c2840;
+      --gold:       #c8a44a;
+      --gold-light: #e8c86a;
+      --gold-dim:   #8a6e2e;
+      --cream:      #f0e6ce;
+      --cream-dim:  #b0a090;
+      --purple:     #6b3fa0;
+      --purple-dim: #3d2460;
+      --border:     rgba(200, 164, 74, 0.25);
+      --border-hover: rgba(200, 164, 74, 0.6);
+      --shadow:     0 8px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      background-color: var(--bg-deep);
+      color: var(--cream);
+      font-family: 'Noto Sans JP', 'Yu Gothic', 'ヒラギノ角ゴ ProN', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* ─── 背景装飾 ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(107, 63, 160, 0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 80% 100%, rgba(200, 164, 74, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── ヘッダー ─── */
+    header {
+      position: relative;
+      z-index: 10;
+      padding: 28px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: rgba(8, 12, 20, 0.7);
+      backdrop-filter: blur(12px);
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header-emblem {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+    }
+
+    .header-emblem svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .header-title {
+      line-height: 1.1;
+    }
+
+    .header-title h1 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      letter-spacing: 0.12em;
+    }
+
+    .header-title p {
+      font-size: 0.7rem;
+      font-weight: 300;
+      color: var(--cream-dim);
+      letter-spacing: 0.2em;
+      margin-top: 3px;
+      text-transform: uppercase;
+    }
+
+    /* ─── メインコンテンツ ─── */
+    main {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      max-width: 960px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 64px 24px 80px;
+    }
+
+    .section-heading {
+      text-align: center;
+      margin-bottom: 52px;
+    }
+
+    .section-heading .label {
+      display: inline-block;
+      font-size: 0.68rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .section-heading h2 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.55rem;
+      font-weight: 500;
+      color: var(--cream);
+      letter-spacing: 0.08em;
+    }
+
+    .divider {
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 16px auto 0;
+    }
+
+    /* ─── カードグリッド ─── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    /* ─── サービスカード ─── */
+    .service-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 36px 32px 32px;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.25s, border-color 0.25s, transform 0.2s, box-shadow 0.25s;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .service-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+    }
+
+    .service-card:hover::before {
+      opacity: 1;
+    }
+
+    .card-icon {
+      width: 52px;
+      height: 52px;
+      background: rgba(107, 63, 160, 0.2);
+      border: 1px solid rgba(107, 63, 160, 0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .card-name {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: var(--gold-light);
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .card-name-en {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--cream-dim);
+      margin-bottom: 16px;
+    }
+
+    .card-desc {
+      font-size: 0.82rem;
+      line-height: 1.85;
+      color: var(--cream-dim);
+      flex: 1;
+    }
+
+    .card-arrow {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 18px;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+    }
+
+    .card-arrow svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.2s;
+    }
+
+    .service-card:hover .card-arrow svg {
+      transform: translateX(4px);
+    }
+
+    /* ─── カードメタ情報（死活・更新日） ─── */
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 20px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(200, 164, 74, 0.12);
+    }
+
+    .card-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.7rem;
+      letter-spacing: 0.04em;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .card-status[data-state="checking"] .status-dot {
+      background: #555568;
+      animation: blink 1.4s ease-in-out infinite;
+    }
+    .card-status[data-state="checking"] .status-text { color: #707080; }
+
+    .card-status[data-state="online"] .status-dot {
+      background: #4caf7a;
+      box-shadow: 0 0 7px rgba(76, 175, 122, 0.65);
+    }
+    .card-status[data-state="online"] .status-text { color: #4caf7a; }
+
+    .card-status[data-state="offline"] .status-dot { background: #d95050; }
+    .card-status[data-state="offline"] .status-text { color: #d95050; }
+
+    @keyframes blink {
+      0%, 100% { opacity: 0.3; }
+      50%       { opacity: 1; }
+    }
+
+    .card-updated {
+      font-size: 0.65rem;
+      color: var(--cream-dim);
+      opacity: 0.45;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+
+    /* ─── フッター ─── */
+    footer {
+      position: relative;
+      z-index: 10;
+      border-top: 1px solid var(--border);
+      padding: 28px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(8, 12, 20, 0.7);
+      backdrop-filter: blur(12px);
+    }
+
+    .footer-org {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.8rem;
+      color: var(--cream-dim);
+      letter-spacing: 0.08em;
+    }
+
+    .footer-copy {
+      font-size: 0.7rem;
+      color: var(--cream-dim);
+      opacity: 0.5;
+    }
+
+    /* ─── レスポンシブ ─── */
+    @media (max-width: 600px) {
+      header, footer {
+        padding: 20px 20px;
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+
+      .header-brand {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+
+      .header-title h1 {
+        font-size: 1.4rem;
+      }
+
+      main {
+        padding: 48px 16px 64px;
+      }
+
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── ヘッダー ─── -->
+  <header>
+    <div class="header-brand">
+      <div class="header-emblem">
+        <!-- 梵字風エンブレム (SVG) -->
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="22" stroke="#c8a44a" stroke-width="1.2" opacity="0.6"/>
+          <circle cx="24" cy="24" r="17" stroke="#c8a44a" stroke-width="0.6" opacity="0.4"/>
+          <!-- 八葉 -->
+          <g opacity="0.75">
+            <ellipse cx="24" cy="12" rx="2.5" ry="5" fill="#c8a44a" opacity="0.5"/>
+            <ellipse cx="24" cy="36" rx="2.5" ry="5" fill="#c8a44a" opacity="0.5"/>
+            <ellipse cx="12" cy="24" rx="5" ry="2.5" fill="#c8a44a" opacity="0.5"/>
+            <ellipse cx="36" cy="24" rx="5" ry="2.5" fill="#c8a44a" opacity="0.5"/>
+            <ellipse cx="15.5" cy="15.5" rx="2.5" ry="5" fill="#c8a44a" opacity="0.35" transform="rotate(-45 15.5 15.5)"/>
+            <ellipse cx="32.5" cy="15.5" rx="2.5" ry="5" fill="#c8a44a" opacity="0.35" transform="rotate(45 32.5 15.5)"/>
+            <ellipse cx="15.5" cy="32.5" rx="2.5" ry="5" fill="#c8a44a" opacity="0.35" transform="rotate(45 15.5 32.5)"/>
+            <ellipse cx="32.5" cy="32.5" rx="2.5" ry="5" fill="#c8a44a" opacity="0.35" transform="rotate(-45 32.5 32.5)"/>
+          </g>
+          <!-- 中心 -->
+          <circle cx="24" cy="24" r="5" fill="#c8a44a" opacity="0.85"/>
+          <circle cx="24" cy="24" r="2.5" fill="#080c14"/>
+        </svg>
+      </div>
+      <div class="header-title">
+        <h1>聖明王院</h1>
+        <p>Wisdom King Temple &mdash; System Portal</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── メイン ─── -->
+  <main>
+    <div class="section-heading">
+      <span class="label">Services</span>
+      <h2>御システム一覧</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="card-grid">
+
+      <!-- 超抜式挙行登録 -->
+      <a class="service-card" href="https://liberation.showway.biz/" target="_blank" rel="noopener noreferrer">
+        <div class="card-icon">🪷</div>
+        <div class="card-name">超抜式挙行登録</div>
+        <div class="card-name-en">Liberation Ceremony Registration</div>
+        <p class="card-desc">
+          故人の御霊の安らかな成仏を祈る超抜式のご登録を承っております。<br>
+          法要の日程・導師・参列者情報をご入力ください。
+        </p>
+        <div class="card-meta">
+          <div class="card-status" data-state="checking">
+            <span class="status-dot"></span>
+            <span class="status-text">確認中…</span>
+          </div>
+          <span class="card-updated">更新: 2026-04-16</span>
+        </div>
+        <div class="card-arrow">
+          <span>登録する</span>
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8h10M9 4l4 4-4 4"/>
+          </svg>
+        </div>
+      </a>
+
+      <!-- 道具販売登録システム -->
+      <a class="service-card" href="https://itementry.showway.biz/receipts" target="_blank" rel="noopener noreferrer">
+        <div class="card-icon">🛕</div>
+        <div class="card-name">道具販売登録システム</div>
+        <div class="card-name-en">Item Sales Entry System</div>
+        <p class="card-desc">
+          仏具・お守り・御札などの販売情報を登録・管理するシステムです。<br>
+          領収書の発行・売上の記録にご利用ください。
+        </p>
+        <div class="card-meta">
+          <div class="card-status" data-state="checking">
+            <span class="status-dot"></span>
+            <span class="status-text">確認中…</span>
+          </div>
+          <span class="card-updated">更新: 2026-04-16</span>
+        </div>
+        <div class="card-arrow">
+          <span>登録する</span>
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8h10M9 4l4 4-4 4"/>
+          </svg>
+        </div>
+      </a>
+
+      <!-- テンキーレジシステム -->
+      <a class="service-card" href="https://register-xju.pages.dev/" target="_blank" rel="noopener noreferrer">
+        <div class="card-icon">🖩</div>
+        <div class="card-name">テンキーレジシステム</div>
+        <div class="card-name-en">Numpad Register System</div>
+        <p class="card-desc">
+          テンキー操作に最適化されたシンプルなレジシステムです。<br>
+          窓口での会計・集金業務にお役立てください。
+        </p>
+        <div class="card-meta">
+          <div class="card-status" data-state="checking">
+            <span class="status-dot"></span>
+            <span class="status-text">確認中…</span>
+          </div>
+          <span class="card-updated">更新: 2026-04-16</span>
+        </div>
+        <div class="card-arrow">
+          <span>開く</span>
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8h10M9 4l4 4-4 4"/>
+          </svg>
+        </div>
+      </a>
+
+      <!-- 八大明王護摩供 FAX注文入力システム -->
+      <a class="service-card" href="https://dedications.showway.biz/" target="_blank" rel="noopener noreferrer">
+        <div class="card-icon">🔥</div>
+        <div class="card-name">八大明王護摩供<br>FAX注文入力システム</div>
+        <div class="card-name-en">Hachidai Myōō Goma — FAX Order Entry</div>
+        <p class="card-desc">
+          八大明王護摩供のFAX申込書をもとに、祈願内容・施主情報を入力・登録するシステムです。
+        </p>
+        <div class="card-meta">
+          <div class="card-status" data-state="checking">
+            <span class="status-dot"></span>
+            <span class="status-text">確認中…</span>
+          </div>
+          <span class="card-updated">更新: 2026-04-16</span>
+        </div>
+        <div class="card-arrow">
+          <span>入力する</span>
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8h10M9 4l4 4-4 4"/>
+          </svg>
+        </div>
+      </a>
+
+    </div>
+  </main>
+
+  <!-- ─── フッター ─── -->
+  <footer>
+    <div class="footer-org">聖明王院</div>
+    <div class="footer-copy">&copy; <span id="year"></span> WisdomKing. All rights reserved.</div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ─── 死活監視 ───────────────────────────────────────────
+    // no-cors fetch: サーバーが到達可能なら成功、ネットワーク不達なら失敗
+    async function ping(url) {
+      const ctrl = new AbortController();
+      const tid = setTimeout(() => ctrl.abort(), 7000);
+      try {
+        await fetch(url, {
+          method: 'HEAD',
+          mode: 'no-cors',
+          cache: 'no-store',
+          signal: ctrl.signal
+        });
+        clearTimeout(tid);
+        return 'online';
+      } catch {
+        clearTimeout(tid);
+        return 'offline';
+      }
+    }
+
+    const STATE_LABEL = { checking: '確認中…', online: '稼働中', offline: 'オフライン' };
+
+    function setStatus(card, state) {
+      const el = card.querySelector('.card-status');
+      const txt = card.querySelector('.status-text');
+      if (!el || !txt) return;
+      el.setAttribute('data-state', state);
+      txt.textContent = STATE_LABEL[state];
+    }
+
+    (async () => {
+      const cards = [...document.querySelectorAll('.service-card')];
+      await Promise.all(cards.map(async (card) => {
+        const url = card.getAttribute('href');
+        if (!url) return;
+        const state = await ping(url);
+        setStatus(card, state);
+      }));
+    })();
+  </script>
+
+</body>
+</html>
