@@ -234,7 +234,7 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      margin-top: 24px;
+      margin-top: 18px;
       font-size: 0.75rem;
       letter-spacing: 0.15em;
       color: var(--gold);
@@ -248,6 +248,59 @@
 
     .service-card:hover .card-arrow svg {
       transform: translateX(4px);
+    }
+
+    /* ─── カードメタ情報（死活・更新日） ─── */
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 20px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(200, 164, 74, 0.12);
+    }
+
+    .card-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.7rem;
+      letter-spacing: 0.04em;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .card-status[data-state="checking"] .status-dot {
+      background: #555568;
+      animation: blink 1.4s ease-in-out infinite;
+    }
+    .card-status[data-state="checking"] .status-text { color: #707080; }
+
+    .card-status[data-state="online"] .status-dot {
+      background: #4caf7a;
+      box-shadow: 0 0 7px rgba(76, 175, 122, 0.65);
+    }
+    .card-status[data-state="online"] .status-text { color: #4caf7a; }
+
+    .card-status[data-state="offline"] .status-dot { background: #d95050; }
+    .card-status[data-state="offline"] .status-text { color: #d95050; }
+
+    @keyframes blink {
+      0%, 100% { opacity: 0.3; }
+      50%       { opacity: 1; }
+    }
+
+    .card-updated {
+      font-size: 0.65rem;
+      color: var(--cream-dim);
+      opacity: 0.45;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
     }
 
     /* ─── フッター ─── */
@@ -357,6 +410,13 @@
           故人の御霊の安らかな成仏を祈る超抜式のご登録を承っております。<br>
           法要の日程・導師・参列者情報をご入力ください。
         </p>
+        <div class="card-meta">
+          <div class="card-status" data-state="checking">
+            <span class="status-dot"></span>
+            <span class="status-text">確認中…</span>
+          </div>
+          <span class="card-updated">更新: 2026-04-16</span>
+        </div>
         <div class="card-arrow">
           <span>登録する</span>
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -374,6 +434,13 @@
           仏具・お守り・御札などの販売情報を登録・管理するシステムです。<br>
           領収書の発行・売上の記録にご利用ください。
         </p>
+        <div class="card-meta">
+          <div class="card-status" data-state="checking">
+            <span class="status-dot"></span>
+            <span class="status-text">確認中…</span>
+          </div>
+          <span class="card-updated">更新: 2026-04-16</span>
+        </div>
         <div class="card-arrow">
           <span>登録する</span>
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -391,6 +458,13 @@
           テンキー操作に最適化されたシンプルなレジシステムです。<br>
           窓口での会計・集金業務にお役立てください。
         </p>
+        <div class="card-meta">
+          <div class="card-status" data-state="checking">
+            <span class="status-dot"></span>
+            <span class="status-text">確認中…</span>
+          </div>
+          <span class="card-updated">更新: 2026-04-16</span>
+        </div>
         <div class="card-arrow">
           <span>開く</span>
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -407,6 +481,13 @@
         <p class="card-desc">
           八大明王護摩供のFAX申込書をもとに、祈願内容・施主情報を入力・登録するシステムです。
         </p>
+        <div class="card-meta">
+          <div class="card-status" data-state="checking">
+            <span class="status-dot"></span>
+            <span class="status-text">確認中…</span>
+          </div>
+          <span class="card-updated">更新: 2026-04-16</span>
+        </div>
         <div class="card-arrow">
           <span>入力する</span>
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -426,6 +507,46 @@
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ─── 死活監視 ───────────────────────────────────────────
+    // no-cors fetch: サーバーが到達可能なら成功、ネットワーク不達なら失敗
+    async function ping(url) {
+      const ctrl = new AbortController();
+      const tid = setTimeout(() => ctrl.abort(), 7000);
+      try {
+        await fetch(url, {
+          method: 'HEAD',
+          mode: 'no-cors',
+          cache: 'no-store',
+          signal: ctrl.signal
+        });
+        clearTimeout(tid);
+        return 'online';
+      } catch {
+        clearTimeout(tid);
+        return 'offline';
+      }
+    }
+
+    const STATE_LABEL = { checking: '確認中…', online: '稼働中', offline: 'オフライン' };
+
+    function setStatus(card, state) {
+      const el = card.querySelector('.card-status');
+      const txt = card.querySelector('.status-text');
+      if (!el || !txt) return;
+      el.setAttribute('data-state', state);
+      txt.textContent = STATE_LABEL[state];
+    }
+
+    (async () => {
+      const cards = [...document.querySelectorAll('.service-card')];
+      await Promise.all(cards.map(async (card) => {
+        const url = card.getAttribute('href');
+        if (!url) return;
+        const state = await ping(url);
+        setStatus(card, state);
+      }));
+    })();
   </script>
 
 </body>
