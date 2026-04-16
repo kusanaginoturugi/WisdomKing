@@ -192,6 +192,33 @@
       opacity: 1;
     }
 
+    /* ─── アーカイブ（旧システム）カード ─── */
+    .service-card.archived {
+      opacity: 0.78;
+    }
+    .service-card.archived .card-icon {
+      background: rgba(176, 160, 144, 0.08);
+      border-color: rgba(176, 160, 144, 0.25);
+      filter: grayscale(0.5);
+    }
+    .service-card.archived .card-name {
+      color: var(--cream-dim);
+    }
+
+    .archive-badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      padding: 3px 8px;
+      border-radius: 3px;
+      background: rgba(176, 160, 144, 0.12);
+      border: 1px solid rgba(176, 160, 144, 0.35);
+      color: var(--cream-dim);
+      text-transform: uppercase;
+    }
+
     .card-icon {
       width: 52px;
       height: 52px;
@@ -449,6 +476,31 @@
         </div>
       </a>
 
+      <!-- 道具販売登録システム 2025年度版（旧システム） -->
+      <a class="service-card archived" href="https://itementry2025.showway.biz/" target="_blank" rel="noopener noreferrer">
+        <span class="archive-badge">Archive</span>
+        <div class="card-icon">🗄️</div>
+        <div class="card-name">道具販売登録システム<br>（2025年度版）</div>
+        <div class="card-name-en">Item Sales Entry — FY2025 Archive</div>
+        <p class="card-desc">
+          2025年度のデータのみが格納されている旧システムです。<br>
+          閲覧・参照専用としてご利用ください。新規登録は現行システムへ。
+        </p>
+        <div class="card-meta">
+          <div class="card-status" data-state="checking">
+            <span class="status-dot"></span>
+            <span class="status-text">確認中…</span>
+          </div>
+          <span class="card-updated">2025年度データ</span>
+        </div>
+        <div class="card-arrow">
+          <span>閲覧する</span>
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8h10M9 4l4 4-4 4"/>
+          </svg>
+        </div>
+      </a>
+
       <!-- テンキーレジシステム -->
       <a class="service-card" href="https://register-xju.pages.dev/" target="_blank" rel="noopener noreferrer">
         <div class="card-icon">🖩</div>
@@ -467,6 +519,30 @@
         </div>
         <div class="card-arrow">
           <span>開く</span>
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8h10M9 4l4 4-4 4"/>
+          </svg>
+        </div>
+      </a>
+
+      <!-- 聖明王院道具一括注文 -->
+      <a class="service-card" href="https://bulkpurchase.showway.biz" target="_blank" rel="noopener noreferrer">
+        <div class="card-icon">📦</div>
+        <div class="card-name">聖明王院道具一括注文</div>
+        <div class="card-name-en">Bulk Item Order System</div>
+        <p class="card-desc">
+          仏具・法具などの道具を一括でご注文いただけるシステムです。<br>
+          まとめて発注・在庫管理にご利用ください。
+        </p>
+        <div class="card-meta">
+          <div class="card-status" data-state="checking">
+            <span class="status-dot"></span>
+            <span class="status-text">確認中…</span>
+          </div>
+          <span class="card-updated">更新: 2026-04-16</span>
+        </div>
+        <div class="card-arrow">
+          <span>注文する</span>
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M3 8h10M9 4l4 4-4 4"/>
           </svg>
