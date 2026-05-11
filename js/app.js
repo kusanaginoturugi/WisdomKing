@@ -1,5 +1,17 @@
 const services = [
   {
+    icon: '🧮',
+    name: '八大明王護摩供毎日集計',
+    englishName: 'Daily Tally',
+    href: 'https://dailytally.kusanaginoturugi.workers.dev/',
+    description: {
+      classic: ['護摩供の「毎日集計」用のシンプルな Web アプリです。'],
+      modern: ['護摩供の「毎日集計」用のシンプルな Web アプリです。']
+    },
+    updated: '更新: 2026-05-11',
+    action: { classic: '入力する', modern: '入力' }
+  },
+  {
     icon: '🪷',
     name: '超抜式挙行登録',
     englishName: 'Liberation Ceremony Registration',
