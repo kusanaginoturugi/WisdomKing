@@ -1,7 +1,7 @@
 const services = [
   {
     icon: '🧮',
-    name: '八大明王護摩供毎日集計',
+    name: '毎日集計',
     englishName: 'Daily Tally',
     href: 'https://dailytally.kusanaginoturugi.workers.dev/',
     description: {
