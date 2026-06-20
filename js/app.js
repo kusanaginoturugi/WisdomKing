@@ -61,6 +61,18 @@ const services = [
     action: '開く'
   },
   {
+    icon: '🏷️',
+    name: '荷物番号検索',
+    englishName: 'Baggage Number Registry',
+    href: 'https://nimotsu-bango.kusanaginoturugi.workers.dev/',
+    description: {
+      classic: ['荷物番号と伝道会・お名前を検索し、所属伝道会のデータを追加するシステムです。', '閲覧・追加にはログインが必要です。'],
+      modern: ['荷物番号を検索し、所属伝道会のデータを追加するシステムです。', 'ログイン済みユーザーは全件検索できます。']
+    },
+    updated: '更新: 2026-06-20',
+    action: { classic: '開く', modern: '開く' }
+  },
+  {
     icon: '📦',
     name: {
       classic: '聖明王院道具一括注文',
