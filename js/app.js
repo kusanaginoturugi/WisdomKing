@@ -3,7 +3,7 @@ const services = [
     icon: '🧮',
     name: '毎日集計',
     englishName: 'Daily Tally',
-    href: 'https://dailytally.kusanaginoturugi.workers.dev/',
+    href: 'https://dailytally2.kusanaginoturugi.workers.dev/',
     description: {
       classic: ['護摩供の「毎日集計」用のシンプルな Web アプリです。'],
       modern: ['護摩供の「毎日集計」用のシンプルな Web アプリです。']
