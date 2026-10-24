@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 0 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Check JavaScript syntax
+        run: node --check js/app.js
+
+      - name: Check security headers file
+        run: grep -q "Content-Security-Policy" _headers
+
+      - name: Check inline scripts
+        # CSP の script-src 'self' を壊す inline script がないか確認する
+        run: |
+          if grep -rlE '<script>|<script [^>]*>[^<]' --include='*.html' .; then
+            echo "::error::inline script があります"
+            exit 1
+          fi
+
+      - name: Check connect-src covers service hosts
+        # 死活監視の fetch は connect-src の対象。サービスを追加したら _headers にも足す
+        # (ログインのリダイレクト先 auth.showway.biz も対象なので connect-src に入れてある)
+        run: |
+          csp=$(grep -m1 'Content-Security-Policy' _headers)
+          missing=0
+          for host in $(grep -oE "href: 'https://[^/']+" js/app.js | sed "s/href: '//" | sort -u); do
+            if ! grep -qF " ${host}" <<<"$csp"; then
+              echo "::error::${host} が _headers の connect-src にありません"
+              missing=1
+            fi
+          done
+          exit $missing
